@@ -1,0 +1,31 @@
+{
+    "name": "geeksesi/todo-lover",
+    "description": "todo lover is a laravel package that can manage your todos",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Geeksesi\\TodoLover\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Geeksesi\\TodoLover\\Tests\\": "tests/",
+            "Geeksesi\\TodoLover\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mohammad Javad Ghasemy",
+            "email": "geeksesi@gmail.com"
+        }
+    ],
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Geeksesi\\TodoLover\\TodoLoverServiceProvider"
+            ]
+        }
+    }
+}
