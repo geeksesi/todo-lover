@@ -7,7 +7,7 @@ use Illuminate\Support\ServiceProvider;
 
 class TodoLoverServiceProvider extends ServiceProvider
 {
- /**
+    /**
      * Bootstrap services.
      *
      * @return void
