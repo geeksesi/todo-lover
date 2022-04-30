@@ -20,12 +20,17 @@
             "email": "geeksesi@gmail.com"
         }
     ],
-    "require": {},
     "extra": {
         "laravel": {
             "providers": [
                 "Geeksesi\\TodoLover\\TodoLoverServiceProvider"
             ]
         }
+    },
+    "require-dev": {
+        "orchestra/testbench": "^5.8"
+    },
+    "require": {
+        "doctrine/dbal": "^2.12"
     }
 }

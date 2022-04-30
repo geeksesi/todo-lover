@@ -13,6 +13,11 @@
          stopOnFailure="false"
          verbose="true"
 >
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+    </coverage>
     <testsuites>
         <testsuite name="TodoLover">
             <directory suffix="Test.php">./tests</directory>
