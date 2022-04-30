@@ -28,6 +28,20 @@ class TodoLoverServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . "/../config/todo_lover.php", "todo_lover");
+        $this->registerOwnerModel();
+    }
+
+    public function registerOwnerModel()
+    {
+        if (class_exists("OwnerModel")) {
+            return;
+        }
+
+        if (class_exists(config("auth.providers.users.model"))) {
+            class_alias(config("auth.providers.users.model"), "OwnerModel");
+        } else {
+            class_alias(\Geeksesi\TodoLover\Models\User::class, "OwnerModel");
+        }
     }
 
     /**
