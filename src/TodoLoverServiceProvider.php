@@ -17,6 +17,7 @@ class TodoLoverServiceProvider extends ServiceProvider
         Route::middlewareGroup("todo_lover_api", config("todo_lover.api_middleware", []));
         Route::middlewareGroup("todo_lover_web", config("todo_lover.web_middleware", []));
         $this->registerRoutes();
+        $this->loadMigrationsFrom(__DIR__ . "/../database/migrations");
     }
 
     /**
