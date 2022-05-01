@@ -1,4 +1,5 @@
 <?php
+namespace Geeksesi\TodoLover;
 
 class TaskStatusEnum
 {
