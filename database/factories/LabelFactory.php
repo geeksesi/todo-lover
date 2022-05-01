@@ -1,7 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
-use Geeksesi\TodoLover\Models\Lable;
+use Geeksesi\TodoLover\Models\Label;
 use Illuminate\Support\Str;
 
 /*
@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(Lable::class, function (Faker $faker) {
+$factory->define(Label::class, function (Faker $faker) {
     return [
         "title" => Str::random(10),
     ];

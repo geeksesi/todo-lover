@@ -2,6 +2,7 @@
 
 use Faker\Generator as Faker;
 use Geeksesi\TodoLover\Models\Task;
+use Geeksesi\TodoLover\TaskStatusEnum;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
