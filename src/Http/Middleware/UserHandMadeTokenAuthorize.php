@@ -3,6 +3,7 @@
 namespace Geeksesi\TodoLover\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class UserHandMadeTokenAuthorize
 {
@@ -15,6 +16,11 @@ class UserHandMadeTokenAuthorize
      */
     public function handle($request, Closure $next)
     {
+        if ($authorize = $request->header("authorization", false)) {
+            $token = substr($authorize, 7);
+            $owner = \OwnerModel::where("token", $token)->first();
+            Auth::setUser($owner);
+        }
         return $next($request);
     }
 }
