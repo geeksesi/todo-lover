@@ -6,7 +6,7 @@ use Geeksesi\TodoLover\Models\Task;
 
 trait HasTaskTrait
 {
-    public function task()
+    public function tasks()
     {
         return $this->morphMany(Task::class, "owner");
     }
