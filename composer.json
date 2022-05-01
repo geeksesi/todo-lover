@@ -28,7 +28,8 @@
         }
     },
     "require-dev": {
-        "orchestra/testbench": "^5.8"
+        "orchestra/testbench": "^5.8",
+        "laravel/legacy-factories": "^1.0.4"
     },
     "require": {
         "doctrine/dbal": "^2.12"
