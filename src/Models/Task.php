@@ -10,9 +10,9 @@ class Task extends Model
 
     protected $fillable = ["title", "description", "status"];
 
-    public function lables()
+    public function labels()
     {
-        return $this->hasManyThrough(Lable::class, "task_lable");
+        return $this->belongsToMany(Label::class, "label_task");
     }
 
     public function owner()
