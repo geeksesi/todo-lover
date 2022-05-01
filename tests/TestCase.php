@@ -4,7 +4,7 @@ namespace Geeksesi\TodoLover\Tests;
 use Geeksesi\TodoLover\TodoLoverServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\Concerns\WithLaravelMigrations;
-
+use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 class TestCase extends \Orchestra\Testbench\TestCase
 {
     use RefreshDatabase;
@@ -12,6 +12,10 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->app
+        ->make(EloquentFactory::class)
+        ->load(__DIR__.'/../database/factories');
     }
 
     protected function defineDatabaseMigrations()
@@ -67,7 +71,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
     public function authentication(): \OwnerModel
     {
-        $owner = \OwnerModel::factory()->create();
+        $owner = factory(\OwnerModel::class)->create();
+
         $this->withToken($owner->token);
         return $owner;
     }
