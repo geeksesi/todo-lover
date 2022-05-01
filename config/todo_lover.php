@@ -1,5 +1,7 @@
 <?php
 
+use Geeksesi\TodoLover\Http\Middleware\UserHandMadeTokenAuthorize;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -25,6 +27,5 @@ return [
     |
     */
 
-    "api_middleware" => ["api"],
-    "web_middleware" => ["web"],
+    "middleware" => ["api", UserHandMadeTokenAuthorize::class],
 ];
