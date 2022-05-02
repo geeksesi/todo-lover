@@ -12,7 +12,6 @@ class TasksCreateTest extends TestCase
         $owner = $this->authentication();
 
         $res = $this->postJson("api/todo_lover/tasks", [
-            // "label" => ["سلام"],
             "title" => Str::random(10),
             "description" => Str::random(100),
         ]);
@@ -21,6 +20,67 @@ class TasksCreateTest extends TestCase
 
         $res->assertJsonStructure([
             "data" => ["labels", "title", "description", "status"],
+        ]);
+    }
+
+    public function test_create_with_label_task()
+    {
+        $owner = $this->authentication();
+
+        $res = $this->postJson("api/todo_lover/tasks", [
+            "labels" => ["hello", "bye"],
+            "title" => Str::random(10),
+            "description" => Str::random(100),
+        ]);
+        $res->assertSuccessful();
+        // $res->dump();
+
+        $res->assertJsonStructure([
+            "data" => ["labels" => [["id", "title"]], "title", "description", "status"],
+        ]);
+    }
+
+    public function test_create_with_duplicate_label_task()
+    {
+        $owner = $this->authentication();
+
+        $res = $this->postJson("api/todo_lover/tasks", [
+            "labels" => ["hello", "hello"],
+            "title" => Str::random(10),
+            "description" => Str::random(100),
+        ]);
+        $res->assertSuccessful();
+        // $res->dump();
+
+        $res->assertJsonStructure([
+            "data" => ["labels" => [["id", "title"]], "title", "description", "status"],
+        ]);
+    }
+    public function test_create_with_duplicate_label_for_seprate_task()
+    {
+        $owner = $this->authentication();
+
+        $res = $this->postJson("api/todo_lover/tasks", [
+            "labels" => ["hello"],
+            "title" => Str::random(10),
+            "description" => Str::random(100),
+        ]);
+        $res->assertSuccessful();
+        // $res->dump();
+        $res->assertJsonStructure([
+            "data" => ["labels" => [["id", "title"]], "title", "description", "status"],
+        ]);
+
+        $res2 = $this->postJson("api/todo_lover/tasks", [
+            "labels" => ["hello", "bye"],
+            "title" => Str::random(10),
+            "description" => Str::random(100),
+        ]);
+        $res2->assertSuccessful();
+        // $res2->dump();
+
+        $res2->assertJsonStructure([
+            "data" => ["labels" => [["id", "title"]], "title", "description", "status"],
         ]);
     }
 }

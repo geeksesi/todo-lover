@@ -2,12 +2,11 @@
 
 namespace Geeksesi\TodoLover\Tests\Task;
 
+use Geeksesi\TodoLover\Models\Label;
 use Geeksesi\TodoLover\Models\Task;
 use Geeksesi\TodoLover\TaskStatusEnum;
 use Geeksesi\TodoLover\Tests\TestCase;
 use Illuminate\Support\Str;
-
-use function PHPUnit\Framework\assertEquals;
 
 class TasksUpdateTest extends TestCase
 {
@@ -28,7 +27,7 @@ class TasksUpdateTest extends TestCase
             "data" => ["labels", "title", "description", "status"],
         ]);
 
-        assertEquals(
+        $this->assertEquals(
             $res->original->owner->id,
             $owner->id,
             "owner is not equal test: " . $owner->id . " actual: " . $res->original->owner->id
@@ -93,6 +92,64 @@ class TasksUpdateTest extends TestCase
             "data" => ["labels", "title", "description", "status"],
         ]);
         $this->assertEquals($res->original->status, TaskStatusEnum::DONE, "status didn't update");
+        $this->assertEquals(
+            $res->original->owner->id,
+            $owner->id,
+            "owner is not equal test: " . $owner->id . " actual: " . $res->original->owner->id
+        );
+    }
+
+    public function test_update_task_label()
+    {
+        $owner = $this->authentication();
+        $task = factory(Task::class)->make();
+        $owner->tasks()->save($task);
+        $task->labels()->save(new Label(["title" => "hello"]));
+
+        $res = $this->putJson("api/todo_lover/tasks/" . $task->id, [
+            "title" => Str::random(10),
+            "description" => Str::random(100),
+            "labels" => ["bye"],
+        ]);
+        $res->assertSuccessful();
+        // $res->dump();
+
+        $res->assertJsonStructure([
+            "data" => ["labels", "title", "description", "status"],
+        ]);
+
+        $this->assertEquals($res->original->labels[0]->title, "bye");
+
+        $this->assertEquals(
+            $res->original->owner->id,
+            $owner->id,
+            "owner is not equal test: " . $owner->id . " actual: " . $res->original->owner->id
+        );
+    }
+
+    public function test_just_update_task_label()
+    {
+        $owner = $this->authentication();
+        $task = factory(Task::class)->make();
+        $owner->tasks()->save($task);
+        $task->labels()->save(new Label(["title" => "hello"]));
+
+        $res = $this->putJson("api/todo_lover/tasks/" . $task->id, [
+            "labels" => ["bye", "holo"],
+        ]);
+        $res->assertSuccessful();
+        // $res->dump();
+
+        $res->assertJsonStructure([
+            "data" => ["labels", "title", "description", "status"],
+        ]);
+
+        $this->assertEquals($res->original->labels[0]->title, "bye");
+        // others shouldn't change
+        $this->assertEquals($res->original->title, $task->title);
+        $this->assertEquals($res->original->description, $task->description);
+        $this->assertEquals($res->original->status, $task->status);
+
         $this->assertEquals(
             $res->original->owner->id,
             $owner->id,
