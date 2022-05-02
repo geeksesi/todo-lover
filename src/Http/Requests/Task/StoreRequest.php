@@ -15,7 +15,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::check() && Auth::user()->can("store", Task::class);
+        return Auth::check();
     }
 
     /**

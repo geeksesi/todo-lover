@@ -15,7 +15,7 @@ class IndexRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::check() && Auth::user()->can("viewOwned", Task::class);
+        return Auth::check();
     }
 
     /**
