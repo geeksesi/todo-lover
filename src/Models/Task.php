@@ -21,9 +21,7 @@ class Task extends Model
 
     public function scopeOwned($query, \OwnerModel $owner)
     {
-        return $this->query->whereHasMorph("owner", [\OwnerModel::class], function ($q) use (
-            $owner
-        ) {
+        return $query->whereHasMorph("owner", [\OwnerModel::class], function ($q) use ($owner) {
             $q->where("owner_id", $owner->id);
         });
     }
