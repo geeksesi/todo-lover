@@ -2,8 +2,10 @@
 
 namespace Geeksesi\TodoLover\Tests\Task;
 
+use Geeksesi\TodoLover\Models\Label;
 use Geeksesi\TodoLover\Models\Task;
 use Geeksesi\TodoLover\Tests\TestCase;
+use Illuminate\Support\Arr;
 
 use function PHPUnit\Framework\assertEquals;
 
@@ -97,5 +99,83 @@ class TasksShowTest extends TestCase
         $res->assertJson([
             "data" => [],
         ]);
+    }
+
+    public function test_task_list_by_label()
+    {
+        $owner = $this->authentication();
+        $tasks = [
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+        ];
+        $owner->tasks()->saveMany($tasks);
+
+        Label::insert([["title" => "sprint1"], ["title" => "sprint2"], ["title" => "bug"]]);
+
+        $random_label = Label::all()->random();
+        foreach ($tasks as $task) {
+            $task->labels()->sync([Label::all()->random()->id]);
+        }
+
+        $res = $this->get("api/todo_lover/tasks?label=" . $random_label->id);
+        $res->assertSuccessful();
+        // $res->dump();
+
+        foreach ($res->original as $task) {
+            $this->assertEquals($task->labels[0]->id, $random_label->id);
+        }
+    }
+
+    public function test_task_list_by_label_when_task_has_multiple_label()
+    {
+        $owner = $this->authentication();
+        $tasks = [
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+            factory(Task::class)->make(),
+        ];
+        $owner->tasks()->saveMany($tasks);
+
+        Label::insert([
+            ["title" => "sprint1"],
+            ["title" => "sprint2"],
+            ["title" => "sprint3"],
+            ["title" => "sprint4"],
+            ["title" => "bug"],
+        ]);
+
+        $random_label = Label::all()->random();
+        foreach ($tasks as $task) {
+            $labels = Label::all()
+                ->random(3)
+                ->toArray();
+            $ids = array_column($labels, "id");
+            $task->labels()->sync($ids);
+        }
+
+        $res = $this->get("api/todo_lover/tasks?label=" . $random_label->id);
+        $res->assertSuccessful();
+        // $res->dump();
+
+        foreach ($res->original as $task) {
+            $has_label = false;
+            foreach ($task->labels as $label) {
+                if ($label->id === $random_label->id) {
+                    $has_label = true;
+                }
+            }
+            $this->assertTrue($has_label);
+        }
     }
 }
