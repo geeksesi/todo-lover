@@ -3,6 +3,7 @@
 namespace Geeksesi\TodoLover\Http\Requests\Label;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class IndexRequest extends FormRequest
 {
@@ -13,7 +14,7 @@ class IndexRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -23,8 +24,6 @@ class IndexRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-        ];
+        return [];
     }
-
 }
