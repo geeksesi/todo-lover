@@ -151,4 +151,61 @@ class TasksTest extends TestCase
             "owner is not equal test: " . $owner->id . " actual: " . $res->original->owner->id
         );
     }
+
+    public function test_list_of_logedin_user_tasks()
+    {
+        $owner = $this->authentication();
+        $owner
+            ->tasks()
+            ->saveMany([
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+            ]);
+
+        $res = $this->get("api/todo_lover/tasks/");
+        $res->assertSuccessful();
+        // $res->dump();
+
+        $res->assertJsonStructure([
+            "data" => [["labels", "title", "description", "status", "status_string"]],
+        ]);
+        foreach ($res->original as $response_task) {
+            $this->assertEquals(
+                $response_task->owner->id,
+                $owner->id,
+                "owner is not equal test: " . $owner->id . " actual: " . $response_task->owner->id
+            );
+        }
+    }
+
+    public function test_cant_get_list_of_other_user_tasks()
+    {
+        $owner = $this->authentication();
+        $other_owner = factory(\OwnerModel::class)->create();
+        $other_owner
+            ->tasks()
+            ->saveMany([
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+                factory(Task::class)->make(),
+            ]);
+
+        $res = $this->get("api/todo_lover/tasks/");
+        $res->assertSuccessful();
+        $res->dump();
+        // should be empty
+        $res->assertJson([
+            "data" => [],
+        ]);
+    }
 }
