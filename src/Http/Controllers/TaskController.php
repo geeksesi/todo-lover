@@ -6,7 +6,6 @@ use Geeksesi\TodoLover\Http\Requests\Task\IndexRequest;
 use Geeksesi\TodoLover\Http\Requests\Task\ShowRequest;
 use Geeksesi\TodoLover\Http\Requests\Task\StoreRequest;
 use Geeksesi\TodoLover\Http\Requests\Task\UpdateRequest;
-use Geeksesi\TodoLover\Http\Resources\TaskCollection;
 use Geeksesi\TodoLover\Http\Resources\TaskResource;
 use Geeksesi\TodoLover\Models\Task;
 use Geeksesi\TodoLover\Services\TaskService;
@@ -14,10 +13,10 @@ use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function index(IndexRequest $request): TaskCollection
+    public function index(IndexRequest $request)
     {
         $tasks = Task::owned(Auth::user())->simplePaginate();
-        return new TaskCollection($tasks);
+        return TaskResource::collection($tasks);
     }
 
     public function show(ShowRequest $request, Task $task): TaskResource

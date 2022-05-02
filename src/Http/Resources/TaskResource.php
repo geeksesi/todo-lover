@@ -21,7 +21,7 @@ class TaskResource extends JsonResource
             "description" => $this->title,
             "status" => $this->status,
             "status_string" => TaskStatusEnum::toString($this->status),
-            "labels" => new LabelCollection($this->labels),
+            "labels" => LabelResource::collection($this->labels),
         ];
     }
 }
