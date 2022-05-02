@@ -2,6 +2,7 @@
 
 namespace Geeksesi\TodoLover\Http\Resources;
 
+use Geeksesi\TodoLover\TaskStatusEnum;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TaskResource extends JsonResource
@@ -18,6 +19,8 @@ class TaskResource extends JsonResource
             "id" => $this->id,
             "title" => $this->title,
             "description" => $this->title,
+            "status" => $this->status,
+            "status_string" => TaskStatusEnum::toString($this->status),
             "labels" => new LabelCollection($this->labels),
         ];
     }

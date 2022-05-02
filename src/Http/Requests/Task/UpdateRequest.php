@@ -2,6 +2,7 @@
 
 namespace Geeksesi\TodoLover\Http\Requests\Task;
 
+use Geeksesi\TodoLover\TaskStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,6 +28,7 @@ class UpdateRequest extends FormRequest
         return [
             "title" => "string",
             "description" => "string",
+            "status" => ["numeric", "in:" . implode(",", TaskStatusEnum::ALL)],
             "labels" => "array",
             "labels.*" => "string",
         ];
