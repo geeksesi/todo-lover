@@ -5,6 +5,7 @@ namespace Geeksesi\TodoLover\Tests;
 use Geeksesi\TodoLover\Models\Label;
 use Geeksesi\TodoLover\Models\Task;
 use Geeksesi\TodoLover\Models\User;
+use Geeksesi\TodoLover\TaskStatusEnum;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Str;
 
@@ -25,7 +26,7 @@ class TasksTest extends TestCase
         // $res->dump();
 
         $res->assertJsonStructure([
-            "data" => ["labels", "title", "description"],
+            "data" => ["labels", "title", "description", "status"],
         ]);
     }
 
@@ -40,7 +41,7 @@ class TasksTest extends TestCase
         // $res->dump();
 
         $res->assertJsonStructure([
-            "data" => ["labels", "title", "description"],
+            "data" => ["labels", "title", "description", "status"],
         ]);
 
         assertEquals(
@@ -76,7 +77,7 @@ class TasksTest extends TestCase
         // $res->dump();
 
         $res->assertJsonStructure([
-            "data" => ["labels", "title", "description"],
+            "data" => ["labels", "title", "description", "status"],
         ]);
 
         assertEquals(
@@ -99,5 +100,55 @@ class TasksTest extends TestCase
         ]);
         $res->assertForbidden();
         // $res->dump();
+    }
+
+    public function test_update_logedin_user_task_status_to_inprogress()
+    {
+        $owner = $this->authentication();
+        $task = factory(Task::class)->make();
+        $owner->tasks()->save($task);
+
+        $res = $this->putJson("api/todo_lover/tasks/" . $task->id, [
+            "status" => TaskStatusEnum::INPROGRESS,
+        ]);
+        $res->assertSuccessful();
+        // $res->dump();
+
+        $res->assertJsonStructure([
+            "data" => ["labels", "title", "description", "status"],
+        ]);
+        $this->assertEquals(
+            $res->original->status,
+            TaskStatusEnum::INPROGRESS,
+            "status didn't update"
+        );
+        $this->assertEquals(
+            $res->original->owner->id,
+            $owner->id,
+            "owner is not equal test: " . $owner->id . " actual: " . $res->original->owner->id
+        );
+    }
+
+    public function test_update_logedin_user_task_status_to_done()
+    {
+        $owner = $this->authentication();
+        $task = factory(Task::class)->make();
+        $owner->tasks()->save($task);
+
+        $res = $this->putJson("api/todo_lover/tasks/" . $task->id, [
+            "status" => TaskStatusEnum::DONE,
+        ]);
+        $res->assertSuccessful();
+        // $res->dump();
+
+        $res->assertJsonStructure([
+            "data" => ["labels", "title", "description", "status"],
+        ]);
+        $this->assertEquals($res->original->status, TaskStatusEnum::DONE, "status didn't update");
+        $this->assertEquals(
+            $res->original->owner->id,
+            $owner->id,
+            "owner is not equal test: " . $owner->id . " actual: " . $res->original->owner->id
+        );
     }
 }
