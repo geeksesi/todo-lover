@@ -61,4 +61,43 @@ class TasksTest extends TestCase
         $res->assertForbidden();
         // $res->dump();
     }
+
+    public function test_update_logedin_user_task()
+    {
+        $owner = $this->authentication();
+        $task = factory(Task::class)->make();
+        $owner->tasks()->save($task);
+
+        $res = $this->putJson("api/todo_lover/tasks/" . $task->id, [
+            "title" => Str::random(10),
+            "description" => Str::random(100),
+        ]);
+        $res->assertSuccessful();
+        // $res->dump();
+
+        $res->assertJsonStructure([
+            "data" => ["labels", "title", "description"],
+        ]);
+
+        assertEquals(
+            $res->original->owner->id,
+            $owner->id,
+            "owner is not equal test: " . $owner->id . " actual: " . $res->original->owner->id
+        );
+    }
+
+    public function test_cant_update_others_task()
+    {
+        $owner = $this->authentication();
+        $other_owner = factory(\OwnerModel::class)->create();
+        $task = factory(Task::class)->make();
+        $other_owner->tasks()->save($task);
+
+        $res = $this->get("api/todo_lover/tasks/" . $task->id, [
+            "title" => Str::random(10),
+            "description" => Str::random(100),
+        ]);
+        $res->assertForbidden();
+        // $res->dump();
+    }
 }
