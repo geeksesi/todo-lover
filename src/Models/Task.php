@@ -25,4 +25,14 @@ class Task extends Model
             $q->where("owner_id", $owner->id);
         });
     }
+
+    public function scopeLabelFilter($query, int $label_id)
+    {
+        if ($label_id === 0) {
+            return $query;
+        }
+        return $query->whereHas("labels", function ($q) use ($label_id) {
+            $q->where("label_id", $label_id);
+        });
+    }
 }

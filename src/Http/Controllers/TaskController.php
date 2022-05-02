@@ -15,7 +15,9 @@ class TaskController extends Controller
 {
     public function index(IndexRequest $request)
     {
-        $tasks = Task::owned(Auth::user())->simplePaginate();
+        $tasks = Task::owned(Auth::user())
+            ->labelFilter($request->get("label", 0))
+            ->simplePaginate();
         return TaskResource::collection($tasks);
     }
 

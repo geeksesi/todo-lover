@@ -25,6 +25,6 @@ class IndexRequest extends FormRequest
      */
     public function rules()
     {
-        return [];
+        return ["label" => "numeric"];
     }
 }
