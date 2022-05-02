@@ -25,7 +25,13 @@ class TaskService
 
     public function update(Task $task, array $data): Task
     {
-        # code...
+        if (!empty($data["labels"])) {
+            $labels = $this->handleLabels($data["labels"]);
+            unset($data["labels"]);
+        }
+        $task->update($data);
+
+        return $task;
     }
 
     private function handleLabels(array $labels): array

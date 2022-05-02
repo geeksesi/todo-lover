@@ -14,7 +14,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::check();
+        return Auth::check() && $this->task->owner->id === Auth::user()->id;
     }
 
     /**
