@@ -7,6 +7,7 @@ use Geeksesi\TodoLover\Models\Task;
 use Geeksesi\TodoLover\Models\User;
 use Geeksesi\TodoLover\TaskStatusEnum;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class TaskService
 {
@@ -41,5 +42,13 @@ class TaskService
         $labels = array_unique($labels);
         $ids = (new LabelService())->findOrCreateMany($labels);
         return $task->labels()->sync($ids);
+    }
+
+    public function clearLabelTaskCach(Task $task)
+    {
+        foreach ($task->labels as $label) {
+            $key = Label::countCacheKey($task->owner_id, $label->id);
+            Cache::forget($key);
+        }
     }
 }
