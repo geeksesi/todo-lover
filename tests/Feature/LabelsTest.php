@@ -57,7 +57,7 @@ class LabelsTest extends TestCase
 
         $res = $this->get("api/todo_lover/labels");
         $res->assertSuccessful();
-        $res->dump();
+        // $res->dump();
         $res->assertJsonStructure(["data" => [["id", "title", "count"]]]);
 
         foreach (json_decode($res->getContent(), true)["data"] as $label) {
