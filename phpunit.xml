@@ -27,5 +27,8 @@
         <env name="APP_ENV" value="self-testing"/>
         <env name="APP_KEY" value="base64:yk+bUVuZa1p86Dqjk9OjVK2R1pm6XHxC6xEKFq8utH0="/>
         <env name="CACHE_DRIVER" value="file"/>
+        <env name="MAIL_FROM_ADDRESS" value="from@example.com"/>
+        <env name="MAIL_FROM_NAME" value="Example"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
     </php>
 </phpunit>
