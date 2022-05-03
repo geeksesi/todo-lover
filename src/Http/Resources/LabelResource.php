@@ -3,6 +3,7 @@
 namespace Geeksesi\TodoLover\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class LabelResource extends JsonResource
 {
@@ -15,8 +16,9 @@ class LabelResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'title' => $this->title,
+            "id" => $this->id,
+            "title" => $this->title,
+            "count" => $this->tasksCount(Auth::user()),
         ];
     }
 }
