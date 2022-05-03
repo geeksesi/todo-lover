@@ -36,7 +36,7 @@ class TasksCreateTest extends TestCase
         // $res->dump();
 
         $res->assertJsonStructure([
-            "data" => ["labels" => [["id", "title"]], "title", "description", "status"],
+            "data" => ["labels" => [["id", "title", "count"]], "title", "description", "status"],
         ]);
     }
 
@@ -53,7 +53,7 @@ class TasksCreateTest extends TestCase
         // $res->dump();
 
         $res->assertJsonStructure([
-            "data" => ["labels" => [["id", "title"]], "title", "description", "status"],
+            "data" => ["labels" => [["id", "title", "count"]], "title", "description", "status"],
         ]);
     }
     public function test_create_with_duplicate_label_for_seprate_task()
@@ -68,7 +68,7 @@ class TasksCreateTest extends TestCase
         $res->assertSuccessful();
         // $res->dump();
         $res->assertJsonStructure([
-            "data" => ["labels" => [["id", "title"]], "title", "description", "status"],
+            "data" => ["labels" => [["id", "title", "count"]], "title", "description", "status"],
         ]);
 
         $res2 = $this->postJson("api/todo_lover/tasks", [
@@ -80,7 +80,7 @@ class TasksCreateTest extends TestCase
         // $res2->dump();
 
         $res2->assertJsonStructure([
-            "data" => ["labels" => [["id", "title"]], "title", "description", "status"],
+            "data" => ["labels" => [["id", "title", "count"]], "title", "description", "status"],
         ]);
     }
 }
