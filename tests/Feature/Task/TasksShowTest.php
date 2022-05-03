@@ -5,9 +5,6 @@ namespace Geeksesi\TodoLover\Tests\Task;
 use Geeksesi\TodoLover\Models\Label;
 use Geeksesi\TodoLover\Models\Task;
 use Geeksesi\TodoLover\Tests\TestCase;
-use Illuminate\Support\Arr;
-
-use function PHPUnit\Framework\assertEquals;
 
 class TasksShowTest extends TestCase
 {
@@ -25,7 +22,7 @@ class TasksShowTest extends TestCase
             "data" => ["labels", "title", "description", "status"],
         ]);
 
-        assertEquals(
+        $this->assertEquals(
             $res->original->owner->id,
             $owner->id,
             "owner is not equal test: " . $owner->id . " actual: " . $res->original->owner->id
