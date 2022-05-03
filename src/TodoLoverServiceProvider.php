@@ -20,6 +20,7 @@ class TodoLoverServiceProvider extends ServiceProvider
     {
         Route::middlewareGroup("todo_lover_api", config("todo_lover.middleware", []));
         $this->registerRoutes();
+        $this->registerPublishing();
         $this->loadMigrationsFrom(__DIR__ . "/../database/migrations");
         Task::observe(TaskObserver::class);
         Label::observe(LabelObserver::class);
@@ -65,5 +66,24 @@ class TodoLoverServiceProvider extends ServiceProvider
                 $this->loadRoutesFrom(__DIR__ . "/../config/routes/api.php");
             }
         );
+    }
+
+    private function registerPublishing()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes(
+                [
+                    __DIR__ . "/../database/migrations" => database_path("migrations"),
+                ],
+                "todo_lover-migrations"
+            );
+
+            $this->publishes(
+                [
+                    __DIR__ . "/../config/todo_lover.php" => config_path("todo_lover.php"),
+                ],
+                "todo_lover-config"
+            );
+        }
     }
 }
