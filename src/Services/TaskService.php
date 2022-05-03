@@ -53,4 +53,12 @@ class TaskService
             Cache::forget($key);
         }
     }
+
+    public function notifOnStatusChange(Task $task)
+    {
+        if (!$task->wasChanged("status")) {
+            return;
+        }
+        (new NotificationService())->dispatchTaskStatusNotify($task);
+    }
 }
