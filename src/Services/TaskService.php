@@ -22,6 +22,7 @@ class TaskService
 
         if (!empty($data["labels"])) {
             $this->handleLabels($task, $data["labels"]);
+            $this->clearLabelTaskCountCach($task);
         }
         return $task;
     }
@@ -31,6 +32,7 @@ class TaskService
         if (!empty($data["labels"])) {
             $this->handleLabels($task, $data["labels"]);
             unset($data["labels"]);
+            $this->clearLabelTaskCountCach($task);
         }
         $task->update($data);
 
@@ -44,7 +46,7 @@ class TaskService
         return $task->labels()->sync($ids);
     }
 
-    public function clearLabelTaskCach(Task $task)
+    public function clearLabelTaskCountCach(Task $task)
     {
         foreach ($task->labels as $label) {
             $key = Label::countCacheKey($task->owner_id, $label->id);

@@ -16,7 +16,6 @@ class TaskObserver
      */
     public function created(Task $task)
     {
-        (new TaskService())->clearLabelTaskCach($task);
     }
 
     /**
@@ -37,7 +36,6 @@ class TaskObserver
      */
     public function deleted(Task $task)
     {
-        (new TaskService())->clearLabelTaskCach($task);
     }
 
     /**
@@ -48,7 +46,6 @@ class TaskObserver
      */
     public function restored(Task $task)
     {
-        (new TaskService())->clearLabelTaskCach($task);
     }
 
     /**
@@ -59,6 +56,5 @@ class TaskObserver
      */
     public function forceDeleted(Task $task)
     {
-        (new TaskService())->clearLabelTaskCach($task);
     }
 }
